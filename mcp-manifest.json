@@ -1,0 +1,45 @@
+{
+  "name": "zoho-crm-mcp-server",
+  "version": "0.1.0",
+  "description": "Model Context Protocol server for Zoho CRM integration",
+  "capabilities": {
+    "tools": [
+      {
+        "name": "get_leads",
+        "description": "Get leads from Zoho CRM with pagination support"
+      },
+      {
+        "name": "create_lead",
+        "description": "Create a new lead in Zoho CRM"
+      },
+      {
+        "name": "get_contacts",
+        "description": "Get contacts from Zoho CRM with pagination support"
+      },
+      {
+        "name": "get_deals",
+        "description": "Get deals from Zoho CRM with pagination support"
+      },
+      {
+        "name": "search_records",
+        "description": "Search records in any Zoho CRM module with custom criteria"
+      }
+    ]
+  },
+  "authentication": {
+    "type": "oauth2",
+    "flows": ["refresh_token"],
+    "tokenUrl": "https://accounts.zoho.com/oauth/v2/token"
+  },
+  "requirements": {
+    "python": ">=3.8",
+    "dependencies": [
+      "mcp>=1.0.0",
+      "requests>=2.25.0",
+      "python-dotenv>=0.19.0"
+    ]
+  },
+  "repository": "https://github.com/asklokesh/zoho-crm-mcp-server",
+  "license": "MIT",
+  "author": "asklokesh"
+}

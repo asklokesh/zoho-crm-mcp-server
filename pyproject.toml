@@ -12,10 +12,9 @@ authors = [
     { name = "asklokesh", email = "asklokesh@example.com" }
 ]
 dependencies = [
-    "httpx>=0.24.0",
-    "pydantic>=2.0",
-    "pydantic-settings>=2.0",
-    "python-dotenv>=1.0.0"
+    "mcp>=1.0.0",
+    "requests>=2.25.0",
+    "python-dotenv>=0.19.0"
 ]
 
 [project.optional-dependencies]
@@ -28,3 +27,6 @@ dev = [
 
 [project.scripts]
 zoho-crm-mcp = "zoho_crm_mcp.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/zoho_crm_mcp"]

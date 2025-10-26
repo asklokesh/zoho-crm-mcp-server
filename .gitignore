@@ -20,6 +20,10 @@ wheels/
 .installed.cfg
 *.egg
 
+# Environment variables
+.env
+.env.local
+
 # Virtual environments
 .env
 .venv

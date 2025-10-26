@@ -1,0 +1,84 @@
+name: Syntax and Lint Check
+
+on:
+  push:
+    branches: [ main, develop, "copilot/**" ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+jobs:
+  syntax-check:
+    name: Python Syntax Check
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Check Python syntax
+      run: |
+        python -m py_compile src/zoho_crm_mcp/*.py
+        python -m py_compile tests/*.py
+        python -m py_compile check_health.py
+        python -m py_compile examples/*.py
+
+  lint-check:
+    name: Lint with Ruff
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: "3.12"
+
+    - name: Install ruff
+      run: |
+        python -m pip install --upgrade pip
+        pip install ruff
+
+    - name: Lint with ruff
+      run: |
+        ruff check src/ tests/ examples/ check_health.py --output-format=github
+      continue-on-error: true
+
+    - name: Format check with ruff
+      run: |
+        ruff format --check src/ tests/ examples/ check_health.py
+      continue-on-error: true
+
+  structure-check:
+    name: Repository Structure Check
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Check required files exist
+      run: |
+        echo "Checking for required files..."
+        test -f README.md && echo "✓ README.md" || (echo "✗ README.md missing" && exit 1)
+        test -f pyproject.toml && echo "✓ pyproject.toml" || (echo "✗ pyproject.toml missing" && exit 1)
+        test -f .gitignore && echo "✓ .gitignore" || (echo "✗ .gitignore missing" && exit 1)
+        test -f .env.example && echo "✓ .env.example" || (echo "✗ .env.example missing" && exit 1)
+        test -f CONTRIBUTING.md && echo "✓ CONTRIBUTING.md" || (echo "✗ CONTRIBUTING.md missing" && exit 1)
+        test -f src/zoho_crm_mcp/__init__.py && echo "✓ __init__.py" || (echo "✗ __init__.py missing" && exit 1)
+        test -f src/zoho_crm_mcp/server.py && echo "✓ server.py" || (echo "✗ server.py missing" && exit 1)
+        test -f src/zoho_crm_mcp/config.py && echo "✓ config.py" || (echo "✗ config.py missing" && exit 1)
+        test -f src/zoho_crm_mcp/zoho_client.py && echo "✓ zoho_client.py" || (echo "✗ zoho_client.py missing" && exit 1)
+        test -d tests && echo "✓ tests/" || (echo "✗ tests/ missing" && exit 1)
+        test -d .github/workflows && echo "✓ .github/workflows/" || (echo "✗ .github/workflows/ missing" && exit 1)
+        echo "All required files present!"

@@ -1,5 +1,7 @@
 # Zoho CRM MCP Server
 
+<!-- mcp-name: io.github.asklokesh/zoho-crm-mcp-server -->
+
 <div align="center">
 
 # Zoho Crm Mcp Server
